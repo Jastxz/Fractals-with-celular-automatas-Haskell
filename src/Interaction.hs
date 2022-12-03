@@ -7,6 +7,8 @@ import Graphics.Gloss.Interface.IO.Game
 import Tipos
 import Utiles
 import UtilesGraficos
+import Opciones
+import Animacion
 
 mainInteraction :: IO ()
 mainInteraction = do
@@ -51,3 +53,29 @@ actualiza _ mundo
   | pantalla == "animacion" = animaAutomata mundo
   | otherwise = return mundo
 -- ---------------------------------------------------------------------------------
+
+{- Funciones de dibujo y gestión de E/S del menú inicial -}
+-- ---------------------------------------------------------------------------------
+pintaMenu :: IO Picture
+pintaMenu = do
+  let titulos = pictures $ listaTextos listaDeJuegos 'Y' comienzoLista evolucionLista True
+  let parte1 = "Primera parte del mensaje de bienvenida"
+  let parte2 = "segunda parte del mensaje de bienvenida"
+  let parte3 = "recuerda que todo debe estar en ingles"
+  let (bX,bY) = posBoton
+  let btn = translate bX bY $ boton "Start" anchoBoton altoBoton
+  let res = pictures [parte1,parte2,parte3,btn]
+  return res
+
+esperaComienzo :: Point -> Mundo -> IO Mundo
+esperaComienzo raton mundo = do
+  let cerca = pulsaCerca raton posBoton
+  let nuevoMundo | cerca = iniciaOpciones | otherwise = mundo
+  return nuevoMundo
+-- ---------------------------------------------------------------------------------
+
+{- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Auxiliares
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -}
+posBoton :: Point
+posBoton = (0.0,-340.0)
