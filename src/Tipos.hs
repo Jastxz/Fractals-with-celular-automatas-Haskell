@@ -1,16 +1,13 @@
 module Tipos (
-    -- Tipos por sinónimos
-    -- Tablero,
+    Automata,
     Pos,
-    -- Movimiento,
-    -- Tipos definidos a partir de tipos nuevos
-    -- Movimientos,
     Mundo
 ) where
 
--- type Tablero = Matrix String
-type Pos = (Int, Int)
--- type Movimiento = (Tablero, Pos)
+import Data.Matrix
 
--- type Movimientos = [Movimiento]
-type Mundo = ()
+type Automata = Matrix Int
+type Pos = (Int, Int)
+
+-- Mundo -> Pantalla, (Regla, Condiciones, Datos Automata), Animación, Adicional
+type Mundo = (String, (Int, String, Automata), Bool, [[String]])

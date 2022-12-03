@@ -131,3 +131,6 @@ now = getCurrentTime Data.Functor.<&> (floor . fromRational . toRational . utctD
 
 time :: IO Double
 time = getCurrentTime Data.Functor.<&> (fromRational . toRational . utctDayTime)
+
+vacia :: Matrix Int
+vacia = zero 1 1

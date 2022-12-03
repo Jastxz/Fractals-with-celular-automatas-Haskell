@@ -26,20 +26,28 @@ tasaDeRefresco :: Int
 tasaDeRefresco = 1
 
 dibujaMundo :: Mundo -> IO Picture
-dibujaMundo mundo = undefined
+dibujaMundo mundo@(pantalla, (regla, condiciones, automata), animacion, adicional)
+  | pantalla == "menu" = pintaMenu
+  | pantalla == "opciones" = pintaOpciones mundo
+  | pantalla == "propiedades" = pintaPropiedades mundo
+  | pantalla == "animacion" = pintaAnimacion mundo
+  | otherwise = error "Pantalla desconocida en dibujaMundo"
 
 manejaEntrada :: Event -> Mundo -> IO Mundo
 manejaEntrada evento mundo
   | EventKey (MouseButton LeftButton) Up _ raton <- evento = hazAccion raton mundo
   | otherwise = return mundo
 
--- Función de distribución de casos similar a dibujaMundo
 hazAccion :: Point -> Mundo -> IO Mundo
-hazAccion raton mundo = undefined
+hazAccion raton mundo@(pantalla, (regla, condiciones, automata), animacion, adicional)
+  | pantalla == "menu" = esperaComienzo raton
+  | pantalla == "opciones" = seleccionaOpciones raton mundo
+  | pantalla == "propiedades" = esperaPropiedades raton mundo
+  | pantalla == "animacion" = esperaAnimacion raton mundo
+  | otherwise = error "Pantalla desconocida en hazAccion"
 
 actualiza :: Float -> Mundo -> IO Mundo
-actualiza f mundo = undefined
-
-menuInicial :: Mundo
-menuInicial = undefined
+actualiza _ mundo
+  | pantalla == "animacion" = animaAutomata mundo
+  | otherwise = return mundo
 -- ---------------------------------------------------------------------------------
