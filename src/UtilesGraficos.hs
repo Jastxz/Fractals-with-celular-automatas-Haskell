@@ -6,19 +6,26 @@ module UtilesGraficos(
     tamCheckbox,
     anchoBoton,
     altoBoton,
+    anchoBotonMedio,
+    altoBotonMedio,
     anchoBotonLargo,
     altoBotonLargo,
+    anchoBotonExtraLargo,
+    altoBotonExtraLargo,
     -- Funciones
     texto,
     menuInicial,
     iniciaOpciones,
+    listaTextos,
     dibujaCheckbox,
     boton,
     pulsaBox,
+    cercaBox,
     pulsaCerca,
 ) where
 
 import Graphics.Gloss
+import Tipos
 import Utiles
 
 gris :: Color
@@ -30,17 +37,38 @@ marron = makeColorI 140 76 0 255
 tamCheckbox :: Float
 tamCheckbox = 10.0
 
+posListaDePropiedades :: Float
+posListaDePropiedades = -140.0
+
 anchoBoton :: Float
 anchoBoton = 150.0
 
 altoBoton :: Float
 altoBoton = 40.0
 
+anchoBotonMedio :: Float
+anchoBotonMedio = 250.0
+
+altoBotonMedio :: Float
+altoBotonMedio = 40.0
+
 anchoBotonLargo :: Float
 anchoBotonLargo = 350.0
 
 altoBotonLargo :: Float
 altoBotonLargo = 40.0
+
+anchoBotonExtraLargo :: Float
+anchoBotonExtraLargo = 450.0
+
+altoBotonExtraLargo :: Float
+altoBotonExtraLargo = 40.0
+
+correccionPosicion :: Float -> Float
+correccionPosicion ancho = ancho / 2.0
+
+correccionPosicion2 :: Float -> Float
+correccionPosicion2 ancho = ancho / 4.0
 
 texto :: String -> Picture
 texto = scale 0.2 0.2 . color black . text
@@ -51,9 +79,23 @@ menuInicial = ("menu", (0,"nada", vacia), False, [["nada"]])
 iniciaOpciones :: Mundo
 iniciaOpciones = ("opciones", (0, "nada", vacia), False, [["nada"]])
 
+listaTextos :: [String] -> Char -> Float -> Float -> Bool -> [Picture]
+listaTextos [] _ _ _ _ = []
+listaTextos (t : ts) eje actual modificador menu
+  | eje == 'X' || eje == 'x' = translate actual constante tx : siguiente
+  | eje == 'Y' || eje == 'y' = translate constante actual tx : siguiente
+  | otherwise = error "El eje especificado a la función listaTextos no es correcto"
+  where
+    siguiente = listaTextos ts eje (actual + modificador) modificador menu
+    tx = texto t
+    constante
+      | menu = posListaDePropiedades
+      | otherwise = 0
+
 dibujaCheckbox :: Int -> Int -> Char -> Float -> Float -> [Picture]
 dibujaCheckbox total elegido eje actual modificador = dibujaCheckbox' total elegido eje actual modificador 0
 
+dibujaCheckbox' :: Int -> Int -> Char -> Float -> Float -> Int -> [Picture]
 dibujaCheckbox' total elegido eje actual modificador acum
   | acum > total = []
   | eje == 'X' || eje == 'x' = translate actual 0 checkbox : siguiente

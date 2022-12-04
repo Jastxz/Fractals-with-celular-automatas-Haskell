@@ -1,6 +1,6 @@
 cabal-version:      3.0
 name:               Automatas
-version:            0.3.0.0
+version:            0.4.0.0
 synopsis:
 
 -- A longer description of the package.
@@ -25,7 +25,7 @@ library
 
     -- Modules included in this library but not exported.
     other-modules: Tipos, Utiles, UtilesGraficos,
-        Opciones, Animacion
+        Opciones, Propiedades, Animacion, Automata
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
