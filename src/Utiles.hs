@@ -1,5 +1,6 @@
 module Utiles
-  ( cabeza,
+  ( rangos,
+    cabeza,
     esInt,
     esReal,
     stringToInt,
@@ -25,6 +26,14 @@ import Data.Char
 import qualified Data.Functor
 import Data.Time.Clock
 import Tipos
+
+{- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Funciones de matrices en útiles.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -}
+
+rangos :: Matrix a -> (Int, Int)
+rangos m = (1, nrows m)
+
 
 {- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Funciones normales en útiles.
