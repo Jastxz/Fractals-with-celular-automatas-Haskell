@@ -11,9 +11,6 @@ import Utiles
 import UtilesGraficos
 import Automata
 
-tam :: Int
-tam = 50
-
 pintaAnimacion :: Mundo -> IO Picture
 pintaAnimacion mundo@(pantalla, (regla, condiciones, automata), animacion, adicional) = do
   let numCels = nrows automata
