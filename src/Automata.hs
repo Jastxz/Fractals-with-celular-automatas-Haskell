@@ -1,24 +1,43 @@
 module Automata(
   propiedadesRegla,
-  aplicaRegla
+  aplicaRegla,
 ) where
 
 import Data.Matrix
 import Tipos
 import Utiles
 
+numcelulas :: Int
+numcelulas = 50
+
 propiedadesRegla :: Int -> [String]
-propiedadesRegla = undefined
+propiedadesRegla regla
+  | numeroRegla regla == 30 = [senConIni, topTrans, punDen]
+  | numeroRegla regla == 90 = [dimFractal]
+  | numeroRegla regla == 150 = [senConIni, topTrans, punDen]
+  | otherwise = error $ "A la funcion propiedadesRegla le entra una regla no valida. La regla: " ++ show regla 
+  where
+    senConIni = "Sensitivity to initial conditions"
+    topTrans = "Topologically transitive"
+    punDen = "Periodic points are dense"
+    dimFractal = "Fractal dimension"
+
+numeroRegla :: Int -> Int
+numeroRegla r 
+  | r==0 = 30
+  | r==1 = 90
+  | r==2 = 150
+  | otherwise = error $ "No se reconoce el valor introducido para traducirlo a regla. El valor: " ++ show r
 
 aplicaRegla :: Int -> Automata -> Automata
-aplicaRegla regla automata = aplicaRegla' regla automata (base, base) nuevo_automata
+aplicaRegla regla automata = aplicaRegla' regla automata (base, base) nuevoAutomata
   where 
     (base, tam) = rangos automata
-    nuevo_automata = Data.Matrix.zero tam tam
+    nuevoAutomata = Data.Matrix.zero tam tam
 
 aplicaRegla' :: Int -> Automata -> Pos -> Automata -> Automata
-aplicaRegla' regla automata pos@(f,c) nuevo_automata
-  | f>tam = nuevo_automata
+aplicaRegla' regla automata pos@(f,c) nuevoAutomata
+  | f>tam = nuevoAutomata
   | c==tam = aplicaRegla' regla automata (f+1,base) na 
   | otherwise = aplicaRegla' regla automata (f,c+1) na
   where
@@ -35,7 +54,7 @@ aplicaRegla' regla automata pos@(f,c) nuevo_automata
       | regla==90 = regla90 iz central der
       | regla==150 = regla150 iz central der
       | otherwise = error $ "A la funcion aplicaRegla le entra una regla no valida. La regla: " ++ show regla 
-    na = Data.Matrix.setElem ne pos nuevo_automata
+    na = Data.Matrix.setElem ne pos nuevoAutomata
 
 regla30 :: Int -> Int -> Int -> Int
 regla30 izq central der
