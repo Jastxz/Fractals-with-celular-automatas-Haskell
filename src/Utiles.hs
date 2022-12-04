@@ -14,9 +14,13 @@ module Utiles
     aleatorio,
     escogeAleatorios,
     normaliza,
+    now,
+    time,
+    vacia,
   )
 where
 
+import Data.Matrix
 import Data.Char
 import qualified Data.Functor
 import Data.Time.Clock
