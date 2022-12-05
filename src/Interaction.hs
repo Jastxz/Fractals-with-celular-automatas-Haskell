@@ -26,7 +26,7 @@ fondo = gris
 
 -- Cuantas veces se actualiza el dibujo cada segundo
 tasaDeRefresco :: Int
-tasaDeRefresco = 1
+tasaDeRefresco = 3
 
 dibujaMundo :: Mundo -> IO Picture
 dibujaMundo mundo@(pantalla, (regla, condiciones, automata), animacion, adicional)

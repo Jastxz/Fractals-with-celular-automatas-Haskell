@@ -21,8 +21,8 @@ pintaOpciones mundo@(pantalla, (regla, condicion, automata), animacion, adiciona
   let condiciones = head infoEstatica
   let dibCondiciones = translate 0 (alturasCasillas !! 1) $ pictures $ listaTextos condiciones 'X' inicioCasillas evolucionCasillas False
   let lCondiciones = length condiciones
-  let cond | condicion == "unaActiva" = 1
-        | otherwise = 0
+  let cond | condicion == "Random" = 0
+        | otherwise = 1
   let cbx1 = pictures $ dibujaCheckbox (lCondiciones - 1) cond 'X' inicioCasillas evolucionCasillas
   let checkboxCondiciones = translate 0 (alturasCasillas !! 2) cbx1
   -- Dibujando las reglas disponibles
@@ -119,6 +119,7 @@ cambiaOpcion raton mundo@(pantalla, (regla, condicion, automata), animacion, adi
 
 traduceRegla :: String -> Int
 traduceRegla regla
-  | regla == "aleatoria" = 0
-  | regla == "unaActiva" = 1
+  | regla == "30" = 0
+  | regla == "90" = 1
+  | regla == "150" = 2
   | otherwise = error $ "En traduceRegla no esta entrando una regla valida. Entrada: " ++ regla

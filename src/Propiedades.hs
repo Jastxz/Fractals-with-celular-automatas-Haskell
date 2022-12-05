@@ -15,17 +15,17 @@ pintaPropiedades mundo@(pantalla, (regla, condicion, automata), animacion, adici
   let borde = rectangleWire 1000 500
   -- Título
   let textoTitulo = "Chaotic properties of rule " ++ traduceRegla regla
-  let titulo = translate (-450.0) (-250.0) $ texto textoTitulo
+  let titulo = translate (-450.0) 250.0 $ texto textoTitulo
   -- Dibujando las condiciones iniciales
-  let comienzoLista = 220.0
+  let comienzoLista = 200.0
   let evolucionLista = -40.0
   let textosPropiedades = propiedadesRegla regla
   let propiedades = pictures $ listaTextos textosPropiedades 'Y' comienzoLista evolucionLista True
   -- Preparamos los botones y la lista para crear la imagen
   let (vX, vY) = posVolver
-  let prop = translate vX vY $ boton "Back to options" anchoBoton altoBoton
+  let prop = translate vX vY $ boton "Back to options" anchoBotonMedio altoBotonMedio
   let (aX, aY) = posAnim
-  let anim = translate aX aY $ boton "Watch animation" anchoBoton altoBoton
+  let anim = translate aX aY $ boton "Watch animation" anchoBotonMedio altoBotonMedio
   let listaRes = [titulo, propiedades, prop, anim]
   -- Resultado
   let res = pictures listaRes

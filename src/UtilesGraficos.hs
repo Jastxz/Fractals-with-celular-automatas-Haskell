@@ -38,7 +38,7 @@ tamCheckbox :: Float
 tamCheckbox = 10.0
 
 posListaDePropiedades :: Float
-posListaDePropiedades = -140.0
+posListaDePropiedades = -430.0
 
 anchoBoton :: Float
 anchoBoton = 150.0

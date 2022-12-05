@@ -1,6 +1,8 @@
 module Utiles
   ( rangos,
+    vacia,
     cabeza,
+    binario,
     esInt,
     esReal,
     stringToInt,
@@ -17,13 +19,14 @@ module Utiles
     normaliza,
     now,
     time,
-    vacia,
+    generaAleatorios,
   )
 where
 
 import Data.Matrix
 import Data.Char
 import qualified Data.Functor
+import System.Random
 import Data.Time.Clock
 import Tipos
 
@@ -34,6 +37,8 @@ Funciones de matrices en útiles.
 rangos :: Matrix a -> (Int, Int)
 rangos m = (1, nrows m)
 
+vacia :: Matrix Int
+vacia = zero 1 1
 
 {- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Funciones normales en útiles.
@@ -43,6 +48,11 @@ cabeza :: String -> [a] -> a
 cabeza funcion lista
   | null lista = error $ "La lista pasada en la funcion " ++ funcion ++ " esta vacia."
   | otherwise = head lista
+
+binario :: Int -> Int
+binario n
+  | odd n = 1
+  | otherwise = 0
 
 esInt :: String -> Bool
 esInt = foldr ((&&) . isDigit) True
@@ -139,11 +149,16 @@ escogeAleatorios al (x : xs) = do
 normaliza :: Double -> Double
 normaliza d = d - fromIntegral (floor d)
 
+{- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Funciones de aleatoriedad y tiempo en útiles.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -}
+
 now :: IO Int
 now = getCurrentTime Data.Functor.<&> (floor . fromRational . toRational . utctDayTime)
 
 time :: IO Double
 time = getCurrentTime Data.Functor.<&> (fromRational . toRational . utctDayTime)
 
-vacia :: Matrix Int
-vacia = zero 1 1
+generaAleatorios :: Int -> [Int]
+generaAleatorios semilla = [mod x 1000000000000 | x<-listaA]
+    where listaA = take 1000000000000 $ randoms (mkStdGen semilla)
