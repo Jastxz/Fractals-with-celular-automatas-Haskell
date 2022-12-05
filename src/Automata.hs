@@ -69,11 +69,34 @@ aplicaRegla' regla automata pos@(f,c)
       | c==tam = automata ! (fa,base)
       | otherwise = automata ! (fa,c+1)
     ne
+      | regla==18 = regla18 iz central der
+      | regla==22 = regla22 iz central der
       | regla==30 = regla30 iz central der
+      | regla==41 = regla41 iz central der
+      | regla==45 = regla45 iz central der
+      | regla==60 = regla60 iz central der
       | regla==90 = regla90 iz central der
+      | regla==106 = regla106 iz central der
+      | regla==122 = regla122 iz central der
+      | regla==126 = regla126 iz central der
+      | regla==146 = regla146 iz central der
       | regla==150 = regla150 iz central der
+      | regla==154 = regla154 iz central der
       | otherwise = error $ "A la funcion aplicaRegla le entra una regla no valida. La regla: " ++ show regla
     na = setElem ne pos automata
+
+regla18 :: Int -> Int -> Int -> Int
+regla18 izq central der
+  | evaluaEntorno izq central der == "100" = 1
+  | evaluaEntorno izq central der == "001" = 1
+  | otherwise = 0
+
+regla22 :: Int -> Int -> Int -> Int
+regla22 izq central der
+  | evaluaEntorno izq central der == "100" = 1
+  | evaluaEntorno izq central der == "010" = 1
+  | evaluaEntorno izq central der == "001" = 1
+  | otherwise = 0
 
 regla30 :: Int -> Int -> Int -> Int
 regla30 izq central der
@@ -83,10 +106,59 @@ regla30 izq central der
   | evaluaEntorno izq central der == "001" = 1
   | otherwise = 0
 
+regla41 :: Int -> Int -> Int -> Int
+regla41 izq central der
+  | evaluaEntorno izq central der == "101" = 1
+  | evaluaEntorno izq central der == "011" = 1
+  | evaluaEntorno izq central der == "000" = 1
+
+regla45 :: Int -> Int -> Int -> Int
+regla45 izq central der
+  | evaluaEntorno izq central der == "101" = 1
+  | evaluaEntorno izq central der == "011" = 1
+  | evaluaEntorno izq central der == "010" = 1
+  | evaluaEntorno izq central der == "000" = 1
+  | otherwise = 0
+
+regla60 :: Int -> Int -> Int -> Int
+regla60 izq central der
+  | evaluaEntorno izq central der == "101" = 1
+  | evaluaEntorno izq central der == "100" = 1
+  | evaluaEntorno izq central der == "011" = 1
+  | evaluaEntorno izq central der == "010" = 1
+  | otherwise = 0
+
 regla90 :: Int -> Int -> Int -> Int
 regla90 izq central der
+  | evaluaEntorno izq central der == "110" = 1
   | evaluaEntorno izq central der == "100" = 1
-  | evaluaEntorno izq central der == "010" = 1
+  | evaluaEntorno izq central der == "011" = 1
+  | evaluaEntorno izq central der == "001" = 1
+  | otherwise = 0
+
+regla106 :: Int -> Int -> Int -> Int
+regla106 izq central der
+  | evaluaEntorno izq central der == "110" = 1
+  | evaluaEntorno izq central der == "101" = 1
+  | evaluaEntorno izq central der == "011" = 1
+  | evaluaEntorno izq central der == "001" = 1
+  | otherwise = 0
+
+regla122 :: Int -> Int -> Int -> Int
+regla122 izq central der
+  | evaluaEntorno izq central der == "010" = 0
+  | evaluaEntorno izq central der == "000" = 0
+  | otherwise = 1
+
+regla126 :: Int -> Int -> Int -> Int
+regla126 izq central der
+  | evaluaEntorno izq central der == "000" = 0
+  | otherwise = 1
+
+regla146 :: Int -> Int -> Int -> Int
+regla146 izq central der
+  | evaluaEntorno izq central der == "111" = 1
+  | evaluaEntorno izq central der == "100" = 1
   | evaluaEntorno izq central der == "001" = 1
   | otherwise = 0
 
@@ -95,6 +167,14 @@ regla150 izq central der
   | evaluaEntorno izq central der == "111" = 1
   | evaluaEntorno izq central der == "100" = 1
   | evaluaEntorno izq central der == "010" = 1
+  | evaluaEntorno izq central der == "001" = 1
+  | otherwise = 0
+
+regla154 :: Int -> Int -> Int -> Int
+regla154 izq central der
+  | evaluaEntorno izq central der == "111" = 1
+  | evaluaEntorno izq central der == "100" = 1
+  | evaluaEntorno izq central der == "011" = 1
   | evaluaEntorno izq central der == "001" = 1
   | otherwise = 0
 
