@@ -77,7 +77,7 @@ menuInicial :: Mundo
 menuInicial = ("menu", (0,"nada", vacia), False, [["nada"]])
 
 iniciaOpciones :: Mundo
-iniciaOpciones = ("opciones", (0, "nada", vacia), False, [["nada"]])
+iniciaOpciones = ("opciones", (0, "nada", vacia), False, [["Standard"]])
 
 listaTextos :: [String] -> Char -> Float -> Float -> Bool -> [Picture]
 listaTextos [] _ _ _ _ = []

@@ -1,24 +1,30 @@
-module Automata(
-  numCelulas,
-  numeroRegla,
-  propiedadesRegla,
-  automataRandom,
-  automataPreparado,
-  aplicaRegla,
-) where
+module Automata
+  ( numCelulas,
+    numeroRegla,
+    propiedadesRegla,
+    automataRandom,
+    automataPreparado,
+    aplicaRegla,
+  )
+where
 
 import Data.Matrix
 import Tipos
 import Utiles
 
-numCelulas :: Int
-numCelulas = 100
+numCelulas :: String -> Int
+numCelulas tam
+  | tam == "Very big" = 500
+  | tam == "Big" = 200
+  | tam == "Standard" = 100
+  | tam == "Small" = 50
+  | otherwise = error $ "Tamaño especificado en numCelulas incorrecto. Tamaño: " ++ tam
 
 numeroRegla :: Int -> Int
 numeroRegla r
-  | r==0 = 30
-  | r==1 = 90
-  | r==2 = 150
+  | r == 0 = 30
+  | r == 1 = 90
+  | r == 2 = 150
   | otherwise = error $ "No se reconoce el valor introducido para traducirlo a regla. El valor: " ++ show r
 
 propiedadesRegla :: Int -> [String]
@@ -33,17 +39,18 @@ propiedadesRegla regla
     punDen = "Periodic points are dense"
     dimFractal = "Fractal dimension"
 
-automataRandom :: Int -> Automata
-automataRandom semilla = fromList mitad mitad listaAl
-    where
-        mitad = numCelulas `div` 2
-        listaAleatorios = take (numCelulas^2) $ generaAleatorios semilla
-        listaAl = map binario listaAleatorios
-
-automataPreparado :: Automata
-automataPreparado = setElem 1 pos matrizBase
+automataRandom :: Int -> String -> Automata
+automataRandom semilla cels = fromList mitad mitad listaAl
   where
-    mitad = numCelulas `div` 2
+    celulas = numCelulas cels
+    mitad = celulas `div` 2
+    listaAleatorios = take (celulas ^ 2) $ generaAleatorios semilla
+    listaAl = map binario listaAleatorios
+
+automataPreparado :: String -> Automata
+automataPreparado cels = setElem 1 pos matrizBase
+  where
+    mitad = numCelulas cels `div` 2
     centro = mitad `div` 2
     pos = (1, centro)
     matrizBase = zero mitad mitad
@@ -54,36 +61,63 @@ aplicaRegla fila regla automata = aplicaRegla' regla automata (fila, base)
     (base, tam) = rangos automata
 
 aplicaRegla' :: Int -> Automata -> Pos -> Automata
-aplicaRegla' regla automata pos@(f,c)
-  | f>tam = automata
-  | c==tam = na
-  | otherwise = aplicaRegla' regla na (f,c+1)
+aplicaRegla' regla automata pos@(f, c)
+  | f > tam = automata
+  | c == tam = na
+  | otherwise = aplicaRegla' regla na (f, c + 1)
   where
     (base, tam) = rangos automata
-    fa = f-1
-    central = automata ! (fa,c)
+    fa = f -1
+    central = automata ! (fa, c)
     iz
-      | c==base = automata ! (fa,tam)
-      | otherwise = automata ! (fa,c-1)
+      | c == base = automata ! (fa, tam)
+      | otherwise = automata ! (fa, c -1)
     der
-      | c==tam = automata ! (fa,base)
-      | otherwise = automata ! (fa,c+1)
+      | c == tam = automata ! (fa, base)
+      | otherwise = automata ! (fa, c + 1)
     ne
-      | regla==18 = regla18 iz central der
-      | regla==22 = regla22 iz central der
-      | regla==30 = regla30 iz central der
-      | regla==41 = regla41 iz central der
-      | regla==45 = regla45 iz central der
-      | regla==60 = regla60 iz central der
-      | regla==90 = regla90 iz central der
-      | regla==106 = regla106 iz central der
-      | regla==122 = regla122 iz central der
-      | regla==126 = regla126 iz central der
-      | regla==146 = regla146 iz central der
-      | regla==150 = regla150 iz central der
-      | regla==154 = regla154 iz central der
+      | regla == 18 = regla18 iz central der
+      | regla == 22 = regla22 iz central der
+      | regla == 30 = regla30 iz central der
+      | regla == 41 = regla41 iz central der
+      | regla == 45 = regla45 iz central der
+      | regla == 60 = regla60 iz central der
+      | regla == 90 = regla90 iz central der
+      | regla == 106 = regla106 iz central der
+      | regla == 122 = regla122 iz central der
+      | regla == 126 = regla126 iz central der
+      | regla == 146 = regla146 iz central der
+      | regla == 150 = regla150 iz central der
+      | regla == 154 = regla154 iz central der
       | otherwise = error $ "A la funcion aplicaRegla le entra una regla no valida. La regla: " ++ show regla
     na = setElem ne pos automata
+
+{- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Auxiliares
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -}
+
+{- extiendeAutomata :: Automata -> Automata
+extiendeAutomata a = na
+  where
+    nF = nrows a
+    iz = nF `div` 2
+    der
+      | odd nF = iz + 1
+      | otherwise = iz
+    al = toLists a
+    filas = toLists $ zero nF nF
+    listaFilas = al ++ filas
+    listasExtendidas = añadeColumnas "iz" iz $ añadeColumnas "der" der listaFilas
+    na = fromLists listasExtendidas
+
+añadeColumnas :: String -> Int -> [[Int]] -> [[Int]]
+añadeColumnas _ _ [] = []
+añadeColumnas lado cantidad (l : ls)
+  | lado == "iz" = (ceros ++ l) : añadeColumnas lado cantidad ls
+  | lado == "der" = (l ++ ceros) : añadeColumnas lado cantidad ls
+  | otherwise = error $ "Lado indicado en la función añadeColumnas no válido. Indicado: " ++ lado
+  where
+    ceros = replicate cantidad 0 -}
 
 regla18 :: Int -> Int -> Int -> Int
 regla18 izq central der
@@ -111,6 +145,7 @@ regla41 izq central der
   | evaluaEntorno izq central der == "101" = 1
   | evaluaEntorno izq central der == "011" = 1
   | evaluaEntorno izq central der == "000" = 1
+  | otherwise = 0
 
 regla45 :: Int -> Int -> Int -> Int
 regla45 izq central der

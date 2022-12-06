@@ -21,7 +21,8 @@ pintaOpciones mundo@(pantalla, (regla, condicion, automata), animacion, adiciona
   let condiciones = head infoEstatica
   let dibCondiciones = translate 0 (alturasCasillas !! 1) $ pictures $ listaTextos condiciones 'X' inicioCasillas evolucionCasillas False
   let lCondiciones = length condiciones
-  let cond | condicion == "Random" = 0
+  let cond
+        | condicion == "Random" = 0
         | otherwise = 1
   let cbx1 = pictures $ dibujaCheckbox (lCondiciones - 1) cond 'X' inicioCasillas evolucionCasillas
   let checkboxCondiciones = translate 0 (alturasCasillas !! 2) cbx1
@@ -32,20 +33,33 @@ pintaOpciones mundo@(pantalla, (regla, condicion, automata), animacion, adiciona
   let lReglas = length reglas
   let cbx2 = pictures $ dibujaCheckbox (lReglas - 1) regla 'X' inicioCasillas evolucionCasillas
   let checkboxReglas = translate 0 (alturasCasillas !! 5) cbx2
+  -- Dibujando los tamaños de dibujado disponibles
+  let cel = cabeza "pintaOpciones" $ cabeza "pintaOpciones" adicional
+  let tituloCelulas = translate inicioCasillas (alturasCasillas !! 6) $ texto "Choose number of cells"
+  let celulas = infoEstatica !! 2
+  let dibCelulas = translate 0 (alturasCasillas !! 7) $ pictures $ listaTextos celulas 'X' inicioCasillas evolucionCasillas False
+  let lCelulas = length celulas
+  let celula
+        | cel == "Very big" = 3
+        | cel == "Big" = 2
+        | cel == "Standard" = 1
+        | otherwise = 0
+  let cbx2 = pictures $ dibujaCheckbox (lCelulas - 1) celula 'X' inicioCasillas evolucionCasillas
+  let checkboxCelulas = translate 0 (alturasCasillas !! 8) cbx2
   -- Preparamos los botones y la lista para crear la imagen
   let (pX, pY) = posProp
   let prop = translate pX pY $ boton "Chaotic properties of selected rule" anchoBotonExtraLargo altoBotonExtraLargo
   let (aX, aY) = posAnim
   let anim = translate aX aY $ boton "Watch animation" anchoBotonMedio altoBotonMedio
-  let listaRes1 = [borde, tituloCon, dibCondiciones, checkboxCondiciones]
-  let listaRes2 = [tituloReglas, dibReglas, checkboxReglas, prop, anim]
+  let listaRes1 = [borde, tituloCon, dibCondiciones, checkboxCondiciones, tituloReglas, dibReglas]
+  let listaRes2 = [checkboxReglas, tituloCelulas, dibCelulas, checkboxCelulas, prop, anim]
   let listaRes = listaRes1 ++ listaRes2
   -- Resultado
   let res = pictures listaRes
   return res
 
 seleccionaOpciones :: Point -> Mundo -> IO Mundo
-seleccionaOpciones raton@(x,y) mundo = do
+seleccionaOpciones raton@(x, y) mundo = do
   -- Valores de separación entre las casillas de las opciones
   let iC = fst distribucionOpciones
   let eC = snd distribucionOpciones
@@ -74,10 +88,10 @@ Auxiliares
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -}
 
 posProp :: Point
-posProp = (-240.0,-180.0)
+posProp = (-240.0, -180.0)
 
 posAnim :: Point
-posAnim = (200.0,-180.0)
+posAnim = (200.0, -180.0)
 
 distribucionOpciones :: Point
 distribucionOpciones = (-450.0, 130.0)
@@ -89,22 +103,24 @@ ajusteInicialMenu :: Float
 ajusteInicialMenu = ancho / (2 * 8.0)
 
 infoEstatica :: [[String]]
-infoEstatica = [condiciones, reglas]
+infoEstatica = [condiciones, reglas, celulas]
   where
     condiciones = ["Random", "One cell activated"]
     reglas = ["30", "90", "150"]
+    celulas = ["Small", "Standard", "Big", "Very big"]
 
 alturasEstaticas :: [Float]
-alturasEstaticas = [condiciones, reglas]
+alturasEstaticas = [condiciones, reglas, cels]
   where
     condiciones = alturasCasillas !! 2
     reglas = alturasCasillas !! 5
+    cels = alturasCasillas !! 8
 
 alturasCasillas :: [Float]
-alturasCasillas = [a, a - diferencia .. -150.0]
+alturasCasillas = [a, a - diferencia .. -175.0]
   where
     a = ancho - ajusteInicialMenu * 2
-    diferencia = a / 5.0
+    diferencia = a / 8.0
 
 cambiaOpcion :: Point -> Mundo -> Int -> String -> IO Mundo
 cambiaOpcion raton mundo@(pantalla, (regla, condicion, automata), animacion, adicional) nivel opcion
@@ -113,6 +129,9 @@ cambiaOpcion raton mundo@(pantalla, (regla, condicion, automata), animacion, adi
     return nuevoMundo
   | nivel == 1 = do
     let nuevoMundo = (pantalla, (traduceRegla opcion, condicion, automata), animacion, adicional)
+    return nuevoMundo
+  | nivel == 2 = do
+    let nuevoMundo = (pantalla, (regla, condicion, automata), animacion, [[opcion]])
     return nuevoMundo
   | nivel == 99 = return mundo
   | otherwise = error "El nivel de opciones especificado para la función cambiaOpción."

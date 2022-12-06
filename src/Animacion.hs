@@ -55,19 +55,21 @@ animaAutomata mundo@(pantalla, (regla, condiciones, automata), animacion, adicio
   | not animacion = return mundo
   | nrows automata == 1 = do
     semilla <- now
+    let cels = cabeza "animaAutomata" $ cabeza "animaAutomata" adicional
     let na
-          | condiciones == "Random" = automataRandom semilla
-          | otherwise = automataPreparado
-    return (pantalla, (regla, condiciones, na), True, [["2"]])
+          | condiciones == "Random" = automataRandom semilla cels
+          | otherwise = automataPreparado cels
+    return (pantalla, (regla, condiciones, na), True, [[cels, "2"]])
   | otherwise = do
     let reg = numeroRegla regla
-    let fila = cabeza "animaAutomata" $ cabeza "animaAutomata" adicional
-    let f 
+    let cels = cabeza "animaAutomata" $ cabeza "animaAutomata" adicional
+    let fila = cabeza "animaAutomata" adicional !! 1
+    let f
           | esInt fila = stringToInt fila
           | otherwise = error "Datos incorrectos en adicional en animaAutomata"
     let nuevo_automata = aplicaRegla f reg automata
     let fNueva = show (f+1)
-    return (pantalla, (regla, condiciones, nuevo_automata), animacion, [[fNueva]])
+    return (pantalla, (regla, condiciones, nuevo_automata), animacion, [[cels, fNueva]])
 
 {- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Auxiliares
