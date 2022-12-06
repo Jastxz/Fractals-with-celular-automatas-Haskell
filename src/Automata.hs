@@ -76,7 +76,6 @@ aplicaRegla' regla automata pos@(f, c)
       | c == tam = automata ! (fa, base)
       | otherwise = automata ! (fa, c + 1)
     ne
-      | regla == 18 = regla18 iz central der
       | regla == 22 = regla22 iz central der
       | regla == 30 = regla30 iz central der
       | regla == 41 = regla41 iz central der
@@ -119,11 +118,6 @@ añadeColumnas lado cantidad (l : ls)
   where
     ceros = replicate cantidad 0 -}
 
-regla18 :: Int -> Int -> Int -> Int
-regla18 izq central der
-  | evaluaEntorno izq central der == "100" = 1
-  | evaluaEntorno izq central der == "001" = 1
-  | otherwise = 0
 
 regla22 :: Int -> Int -> Int -> Int
 regla22 izq central der
@@ -163,12 +157,51 @@ regla60 izq central der
   | evaluaEntorno izq central der == "010" = 1
   | otherwise = 0
 
+regla73 :: Int -> Int -> Int -> Int
+regla73 izq central der
+  | evaluaEntorno izq central der == "110" = 1
+  | evaluaEntorno izq central der == "011" = 1
+  | evaluaEntorno izq central der == "000" = 1
+  | otherwise = 0
+
+regla75 :: Int -> Int -> Int -> Int
+regla75 izq central der
+  | evaluaEntorno izq central der == "110" = 1
+  | evaluaEntorno izq central der == "011" = 1
+  | evaluaEntorno izq central der == "001" = 1
+  | evaluaEntorno izq central der == "000" = 1
+  | otherwise = 0
+
+regla89 :: Int -> Int -> Int -> Int
+regla89 izq central der
+  | evaluaEntorno izq central der == "110" = 1
+  | evaluaEntorno izq central der == "100" = 1
+  | evaluaEntorno izq central der == "011" = 1
+  | evaluaEntorno izq central der == "000" = 1
+  | otherwise = 0
+
 regla90 :: Int -> Int -> Int -> Int
 regla90 izq central der
   | evaluaEntorno izq central der == "110" = 1
   | evaluaEntorno izq central der == "100" = 1
   | evaluaEntorno izq central der == "011" = 1
   | evaluaEntorno izq central der == "001" = 1
+  | otherwise = 0
+
+regla101 :: Int -> Int -> Int -> Int
+regla101 izq central der
+  | evaluaEntorno izq central der == "110" = 1
+  | evaluaEntorno izq central der == "101" = 1
+  | evaluaEntorno izq central der == "010" = 1
+  | evaluaEntorno izq central der == "000" = 1
+  | otherwise = 0
+
+regla105 :: Int -> Int -> Int -> Int
+regla105 izq central der
+  | evaluaEntorno izq central der == "110" = 1
+  | evaluaEntorno izq central der == "101" = 1
+  | evaluaEntorno izq central der == "011" = 1
+  | evaluaEntorno izq central der == "000" = 1
   | otherwise = 0
 
 regla106 :: Int -> Int -> Int -> Int
@@ -185,10 +218,23 @@ regla122 izq central der
   | evaluaEntorno izq central der == "000" = 0
   | otherwise = 1
 
+regla124 :: Int -> Int -> Int -> Int
+regla124 izq central der
+  | evaluaEntorno izq central der == "111" = 0
+  | evaluaEntorno izq central der == "001" = 0
+  | evaluaEntorno izq central der == "000" = 0
+  | otherwise = 1
+
 regla126 :: Int -> Int -> Int -> Int
 regla126 izq central der
   | evaluaEntorno izq central der == "000" = 0
   | otherwise = 1
+
+regla129 :: Int -> Int -> Int -> Int
+regla129 izq central der
+  | evaluaEntorno izq central der == "111" = 1
+  | evaluaEntorno izq central der == "000" = 1
+  | otherwise = 0
 
 regla146 :: Int -> Int -> Int -> Int
 regla146 izq central der
@@ -211,6 +257,28 @@ regla154 izq central der
   | evaluaEntorno izq central der == "100" = 1
   | evaluaEntorno izq central der == "011" = 1
   | evaluaEntorno izq central der == "001" = 1
+  | otherwise = 0
+
+regla182 :: Int -> Int -> Int -> Int
+regla182 izq central der
+  | evaluaEntorno izq central der == "110" = 0
+  | evaluaEntorno izq central der == "011" = 0
+  | evaluaEntorno izq central der == "000" = 0
+  | otherwise = 1
+
+regla193 :: Int -> Int -> Int -> Int
+regla193 izq central der
+  | evaluaEntorno izq central der == "111" = 1
+  | evaluaEntorno izq central der == "110" = 1
+  | evaluaEntorno izq central der == "000" = 1
+  | otherwise = 0
+
+regla195 :: Int -> Int -> Int -> Int
+regla195 izq central der
+  | evaluaEntorno izq central der == "111" = 1
+  | evaluaEntorno izq central der == "110" = 1
+  | evaluaEntorno izq central der == "001" = 1
+  | evaluaEntorno izq central der == "000" = 1
   | otherwise = 0
 
 evaluaEntorno :: Int -> Int -> Int -> String
