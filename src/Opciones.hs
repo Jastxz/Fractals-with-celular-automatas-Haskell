@@ -117,10 +117,10 @@ alturasEstaticas = [condiciones, reglas, cels]
     cels = alturasCasillas !! 8
 
 alturasCasillas :: [Float]
-alturasCasillas = [a, a - diferencia .. -175.0]
+alturasCasillas = [a, a - diferencia .. -150.0]
   where
     a = ancho - ajusteInicialMenu * 2
-    diferencia = a / 8.0
+    diferencia = a / 5.0
 
 cambiaOpcion :: Point -> Mundo -> Int -> String -> IO Mundo
 cambiaOpcion raton mundo@(pantalla, (regla, condicion, automata), animacion, adicional) nivel opcion

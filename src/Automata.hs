@@ -76,55 +76,22 @@ aplicaRegla' regla automata pos@(f, c)
       | c == tam = automata ! (fa, base)
       | otherwise = automata ! (fa, c + 1)
     ne
-      | regla == 22 = regla22 iz central der
       | regla == 30 = regla30 iz central der
-      | regla == 41 = regla41 iz central der
-      | regla == 45 = regla45 iz central der
-      | regla == 60 = regla60 iz central der
+      | regla == 73 = regla73 iz central der
       | regla == 90 = regla90 iz central der
-      | regla == 106 = regla106 iz central der
+      | regla == 105 = regla105 iz central der
       | regla == 122 = regla122 iz central der
+      | regla == 124 = regla124 iz central der
       | regla == 126 = regla126 iz central der
-      | regla == 146 = regla146 iz central der
       | regla == 150 = regla150 iz central der
-      | regla == 154 = regla154 iz central der
+      | regla == 193 = regla193 iz central der
+      | regla == 195 = regla195 iz central der
       | otherwise = error $ "A la funcion aplicaRegla le entra una regla no valida. La regla: " ++ show regla
     na = setElem ne pos automata
 
 {- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Auxiliares
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -}
-
-{- extiendeAutomata :: Automata -> Automata
-extiendeAutomata a = na
-  where
-    nF = nrows a
-    iz = nF `div` 2
-    der
-      | odd nF = iz + 1
-      | otherwise = iz
-    al = toLists a
-    filas = toLists $ zero nF nF
-    listaFilas = al ++ filas
-    listasExtendidas = añadeColumnas "iz" iz $ añadeColumnas "der" der listaFilas
-    na = fromLists listasExtendidas
-
-añadeColumnas :: String -> Int -> [[Int]] -> [[Int]]
-añadeColumnas _ _ [] = []
-añadeColumnas lado cantidad (l : ls)
-  | lado == "iz" = (ceros ++ l) : añadeColumnas lado cantidad ls
-  | lado == "der" = (l ++ ceros) : añadeColumnas lado cantidad ls
-  | otherwise = error $ "Lado indicado en la función añadeColumnas no válido. Indicado: " ++ lado
-  where
-    ceros = replicate cantidad 0 -}
-
-
-regla22 :: Int -> Int -> Int -> Int
-regla22 izq central der
-  | evaluaEntorno izq central der == "100" = 1
-  | evaluaEntorno izq central der == "010" = 1
-  | evaluaEntorno izq central der == "001" = 1
-  | otherwise = 0
 
 regla30 :: Int -> Int -> Int -> Int
 regla30 izq central der
@@ -134,48 +101,9 @@ regla30 izq central der
   | evaluaEntorno izq central der == "001" = 1
   | otherwise = 0
 
-regla41 :: Int -> Int -> Int -> Int
-regla41 izq central der
-  | evaluaEntorno izq central der == "101" = 1
-  | evaluaEntorno izq central der == "011" = 1
-  | evaluaEntorno izq central der == "000" = 1
-  | otherwise = 0
-
-regla45 :: Int -> Int -> Int -> Int
-regla45 izq central der
-  | evaluaEntorno izq central der == "101" = 1
-  | evaluaEntorno izq central der == "011" = 1
-  | evaluaEntorno izq central der == "010" = 1
-  | evaluaEntorno izq central der == "000" = 1
-  | otherwise = 0
-
-regla60 :: Int -> Int -> Int -> Int
-regla60 izq central der
-  | evaluaEntorno izq central der == "101" = 1
-  | evaluaEntorno izq central der == "100" = 1
-  | evaluaEntorno izq central der == "011" = 1
-  | evaluaEntorno izq central der == "010" = 1
-  | otherwise = 0
-
 regla73 :: Int -> Int -> Int -> Int
 regla73 izq central der
   | evaluaEntorno izq central der == "110" = 1
-  | evaluaEntorno izq central der == "011" = 1
-  | evaluaEntorno izq central der == "000" = 1
-  | otherwise = 0
-
-regla75 :: Int -> Int -> Int -> Int
-regla75 izq central der
-  | evaluaEntorno izq central der == "110" = 1
-  | evaluaEntorno izq central der == "011" = 1
-  | evaluaEntorno izq central der == "001" = 1
-  | evaluaEntorno izq central der == "000" = 1
-  | otherwise = 0
-
-regla89 :: Int -> Int -> Int -> Int
-regla89 izq central der
-  | evaluaEntorno izq central der == "110" = 1
-  | evaluaEntorno izq central der == "100" = 1
   | evaluaEntorno izq central der == "011" = 1
   | evaluaEntorno izq central der == "000" = 1
   | otherwise = 0
@@ -188,28 +116,12 @@ regla90 izq central der
   | evaluaEntorno izq central der == "001" = 1
   | otherwise = 0
 
-regla101 :: Int -> Int -> Int -> Int
-regla101 izq central der
-  | evaluaEntorno izq central der == "110" = 1
-  | evaluaEntorno izq central der == "101" = 1
-  | evaluaEntorno izq central der == "010" = 1
-  | evaluaEntorno izq central der == "000" = 1
-  | otherwise = 0
-
 regla105 :: Int -> Int -> Int -> Int
 regla105 izq central der
   | evaluaEntorno izq central der == "110" = 1
   | evaluaEntorno izq central der == "101" = 1
   | evaluaEntorno izq central der == "011" = 1
   | evaluaEntorno izq central der == "000" = 1
-  | otherwise = 0
-
-regla106 :: Int -> Int -> Int -> Int
-regla106 izq central der
-  | evaluaEntorno izq central der == "110" = 1
-  | evaluaEntorno izq central der == "101" = 1
-  | evaluaEntorno izq central der == "011" = 1
-  | evaluaEntorno izq central der == "001" = 1
   | otherwise = 0
 
 regla122 :: Int -> Int -> Int -> Int
@@ -227,21 +139,9 @@ regla124 izq central der
 
 regla126 :: Int -> Int -> Int -> Int
 regla126 izq central der
+  | evaluaEntorno izq central der == "111" = 0
   | evaluaEntorno izq central der == "000" = 0
   | otherwise = 1
-
-regla129 :: Int -> Int -> Int -> Int
-regla129 izq central der
-  | evaluaEntorno izq central der == "111" = 1
-  | evaluaEntorno izq central der == "000" = 1
-  | otherwise = 0
-
-regla146 :: Int -> Int -> Int -> Int
-regla146 izq central der
-  | evaluaEntorno izq central der == "111" = 1
-  | evaluaEntorno izq central der == "100" = 1
-  | evaluaEntorno izq central der == "001" = 1
-  | otherwise = 0
 
 regla150 :: Int -> Int -> Int -> Int
 regla150 izq central der
@@ -250,21 +150,6 @@ regla150 izq central der
   | evaluaEntorno izq central der == "010" = 1
   | evaluaEntorno izq central der == "001" = 1
   | otherwise = 0
-
-regla154 :: Int -> Int -> Int -> Int
-regla154 izq central der
-  | evaluaEntorno izq central der == "111" = 1
-  | evaluaEntorno izq central der == "100" = 1
-  | evaluaEntorno izq central der == "011" = 1
-  | evaluaEntorno izq central der == "001" = 1
-  | otherwise = 0
-
-regla182 :: Int -> Int -> Int -> Int
-regla182 izq central der
-  | evaluaEntorno izq central der == "110" = 0
-  | evaluaEntorno izq central der == "011" = 0
-  | evaluaEntorno izq central der == "000" = 0
-  | otherwise = 1
 
 regla193 :: Int -> Int -> Int -> Int
 regla193 izq central der

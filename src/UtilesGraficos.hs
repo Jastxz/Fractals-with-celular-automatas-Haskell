@@ -110,7 +110,7 @@ dibujaCheckbox' total elegido eje actual modificador acum
 boton :: String -> Float -> Float -> Picture
 boton palabra an al = pictures [fondo, tx]
   where
-    fondo = color (dark green) (rectangleSolid an al)
+    fondo = color white (rectangleSolid an al)
     tx = translate (- correccionPosicion an) (- correccionPosicion2 al) $ color white (texto palabra)
 
 -- -----------------------------------------------------------------------------------------------------------------------
