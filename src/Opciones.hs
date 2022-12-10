@@ -14,6 +14,7 @@ pintaOpciones mundo@(pantalla, (regla, condicion, automata), animacion, adiciona
   -- Valores de separación entre las casillas de las opciones
   let inicioCasillas = fst distribucionOpciones
   let evolucionCasillas = snd distribucionOpciones
+  let evCReglas = evolucionCasillas - 60.0
   -- Receptáculo para mostrar las opciones
   let borde = rectangleWire 1000 500
   -- Dibujando las condiciones iniciales
@@ -29,9 +30,9 @@ pintaOpciones mundo@(pantalla, (regla, condicion, automata), animacion, adiciona
   -- Dibujando las reglas disponibles
   let tituloReglas = translate inicioCasillas (alturasCasillas !! 3) $ texto "Choose rule"
   let reglas = infoEstatica !! 1
-  let dibReglas = translate 0 (alturasCasillas !! 4) $ pictures $ listaTextos reglas 'X' inicioCasillas evolucionCasillas False
+  let dibReglas = translate 0 (alturasCasillas !! 4) $ pictures $ listaTextos reglas 'X' inicioCasillas evCReglas False
   let lReglas = length reglas
-  let cbx2 = pictures $ dibujaCheckbox (lReglas - 1) regla 'X' inicioCasillas evolucionCasillas
+  let cbx2 = pictures $ dibujaCheckbox (lReglas - 1) regla 'X' inicioCasillas evCReglas
   let checkboxReglas = translate 0 (alturasCasillas !! 5) cbx2
   -- Dibujando los tamaños de dibujado disponibles
   let cel = cabeza "pintaOpciones" $ cabeza "pintaOpciones" adicional
@@ -48,7 +49,7 @@ pintaOpciones mundo@(pantalla, (regla, condicion, automata), animacion, adiciona
   let checkboxCelulas = translate 0 (alturasCasillas !! 8) cbx2
   -- Preparamos los botones y la lista para crear la imagen
   let (pX, pY) = posProp
-  let prop = translate pX pY $ boton "Chaotic properties of selected rule" anchoBotonExtraLargo altoBotonExtraLargo
+  let prop = translate pX pY $ boton "Properties of selected rule" anchoBotonExtraLargo altoBotonExtraLargo
   let (aX, aY) = posAnim
   let anim = translate aX aY $ boton "Watch animation" anchoBotonMedio altoBotonMedio
   let listaRes1 = [borde, tituloCon, dibCondiciones, checkboxCondiciones, tituloReglas, dibReglas]
@@ -63,13 +64,17 @@ seleccionaOpciones raton@(x, y) mundo = do
   -- Valores de separación entre las casillas de las opciones
   let iC = fst distribucionOpciones
   let eC = snd distribucionOpciones
+  let evCReglas = eC - 60.0
   -- Buscando la casilla en cuestión
   let indice = minimum [if cercaBox y altura then p else 99 | (altura, p) <- zip alturasEstaticas [0 ..]]
   let fila
         | indice == 99 = head infoEstatica
         | otherwise = infoEstatica !! indice
   let limite = length fila
-  let indice2 = minimum [if cercaBox x longitud then p else 99 | (longitud, p) <- zip [iC, iC + eC ..] [0 .. (limite - 1)]]
+  let listaDistribuciones
+        | indice == 1 = zip [iC, iC + evCReglas ..] [0 .. (limite - 1)]
+        | otherwise = zip [iC, iC + eC ..] [0 .. (limite - 1)]
+  let indice2 = minimum [if cercaBox x longitud then p else 99 | (longitud, p) <- listaDistribuciones]
   let columna
         | indice == 99 || indice2 == 99 = head fila
         | otherwise = fila !! indice2
@@ -106,7 +111,7 @@ infoEstatica :: [[String]]
 infoEstatica = [condiciones, reglas, celulas]
   where
     condiciones = ["Random", "One cell activated"]
-    reglas = ["30", "90", "150"]
+    reglas = ["30", "73", "90", "105", "122", "124", "126", "150", "193", "195"]
     celulas = ["Small", "Standard", "Big", "Very big"]
 
 alturasEstaticas :: [Float]
@@ -139,6 +144,13 @@ cambiaOpcion raton mundo@(pantalla, (regla, condicion, automata), animacion, adi
 traduceRegla :: String -> Int
 traduceRegla regla
   | regla == "30" = 0
-  | regla == "90" = 1
-  | regla == "150" = 2
+  | regla == "73" = 1
+  | regla == "90" = 2
+  | regla == "105" = 3
+  | regla == "122" = 4
+  | regla == "124" = 5
+  | regla == "126" = 6
+  | regla == "150" = 7
+  | regla == "193" = 8
+  | regla == "195" = 9
   | otherwise = error $ "En traduceRegla no esta entrando una regla valida. Entrada: " ++ regla

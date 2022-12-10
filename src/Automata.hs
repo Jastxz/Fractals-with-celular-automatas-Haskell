@@ -23,21 +23,39 @@ numCelulas tam
 numeroRegla :: Int -> Int
 numeroRegla r
   | r == 0 = 30
-  | r == 1 = 90
-  | r == 2 = 150
+  | r == 1 = 73
+  | r == 2 = 90
+  | r == 3 = 105
+  | r == 4 = 122
+  | r == 5 = 124
+  | r == 6 = 126
+  | r == 7 = 150
+  | r == 8 = 193
+  | r == 9 = 195
   | otherwise = error $ "No se reconoce el valor introducido para traducirlo a regla. El valor: " ++ show r
 
 propiedadesRegla :: Int -> [String]
 propiedadesRegla regla
   | numeroRegla regla == 30 = [senConIni, topTrans, punDen]
-  | numeroRegla regla == 90 = [dimFractal]
-  | numeroRegla regla == 150 = [senConIni, topTrans, punDen]
+  | numeroRegla regla == 73 = [dimFractal++" ~1.7771.", boxC1, boxC2]
+  | numeroRegla regla == 90 = [dimFractal++" ~1.5401.", boxC1, boxC2]
+  | numeroRegla regla == 105 = [dimFractal++" ~1.7751.", boxC1, boxC2]
+  | numeroRegla regla == 122 = [efecto]
+  | numeroRegla regla == 124 = [dimFractal++" ~1.778.", boxC1, boxC2]
+  | numeroRegla regla == 126 = [variacion++" ~1.6657.", boxC1, boxC2]
+  | numeroRegla regla == 150 = [dimFractal++" ~1.6407.", boxC1, boxC2]
+  | numeroRegla regla == 193 = [dimFractal++" ~1.7598.", boxC1, boxC2]
+  | numeroRegla regla == 195 = [variacion, dimFractal++" ~1.5708.", boxC1, boxC2]
   | otherwise = error $ "A la funcion propiedadesRegla le entra una regla no valida. La regla: " ++ show regla
   where
-    senConIni = "Sensitivity to initial conditions"
-    topTrans = "Topologically transitive"
-    punDen = "Periodic points are dense"
-    dimFractal = "Fractal dimension"
+    senConIni = "-  Sensitivity to initial conditions"
+    topTrans = "-  Topologically transitive"
+    punDen = "-  Periodic points are dense"
+    dimFractal = "-  Fractal dimension: "
+    efecto = "-  Simply is an optic effect"
+    variacion = "-  Sierpinski triangle variation"
+    boxC1 = "Note: Calculated with box counting method"
+    boxC2 = " and an error of ~|0.05|."
 
 automataRandom :: Int -> String -> Automata
 automataRandom semilla cels = fromList mitad mitad listaAl
