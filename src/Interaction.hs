@@ -19,7 +19,7 @@ mainInteraction = do
 {- Componentes de la función principal -}
 -- ---------------------------------------------------------------------------------
 ventanaJuego :: Display
-ventanaJuego = InWindow "Automata" (1400, 700) (50, 40)
+ventanaJuego = InWindow "Automata" (1400, 700) (80, 70)
 
 fondo :: Color
 fondo = gris
@@ -63,8 +63,7 @@ pintaMenu = do
   let parte1 = translate inicioCasillas (head alturasCasillas) $ texto "Welcome! With this application you will generate"
   let parte2 = translate inicioCasillas (alturasCasillas !! 1) $ texto "fractal patterns using cellular automata."
   let parte3 = translate inicioCasillas (alturasCasillas !! 2) $ texto "To get started, click on the button below."
-  let (bX,bY) = posBoton
-  let btn = translate bX bY $ boton "Start" anchoBoton altoBoton
+  btn <- creaBoton posBoton "Start"
   let res = pictures [parte1,parte2,parte3,btn]
   return res
 

@@ -29,6 +29,7 @@ import qualified Data.Functor
 import System.Random
 import Data.Time.Clock
 import Tipos
+import Data.List (genericLength)
 
 {- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Funciones de matrices en útiles.

@@ -11,86 +11,83 @@ import UtilesGraficos
 
 pintaOpciones :: Mundo -> IO Picture
 pintaOpciones mundo@(pantalla, (regla, condicion, automata), animacion, adicional) = do
-  -- Valores de separación entre las casillas de las opciones
-  let inicioCasillas = fst distribucionOpciones
+  -- Inicializando algunas variables necesarias
+  let [infoCon, infoReg, infoCel] = infoEstatica
   let evolucionCasillas = snd distribucionOpciones
   let evCReglas = evolucionCasillas - 60.0
   -- Receptáculo para mostrar las opciones
-  let borde = rectangleWire 1000 500
-  -- Dibujando las condiciones iniciales
-  let tituloCon = translate inicioCasillas (head alturasCasillas) $ texto "Initial conditions"
-  let condiciones = head infoEstatica
-  let dibCondiciones = translate 0 (alturasCasillas !! 1) $ pictures $ listaTextos condiciones 'X' inicioCasillas evolucionCasillas False
-  let lCondiciones = length condiciones
+  let borde = uncurry rectangleWire tamañoRectangulo
+  -- Dibujando las condiciones
+  let alturasCon = [head alturasCasillas, alturasCasillas !! 1, alturasCasillas !! 2]
   let cond
         | condicion == "Random" = 0
         | otherwise = 1
-  let cbx1 = pictures $ dibujaCheckbox (lCondiciones - 1) cond 'X' inicioCasillas evolucionCasillas
-  let checkboxCondiciones = translate 0 (alturasCasillas !! 2) cbx1
+  bloqueCon <- creaBloque alturasCon etiquetaCond infoCon cond distribucionOpciones
   -- Dibujando las reglas disponibles
-  let tituloReglas = translate inicioCasillas (alturasCasillas !! 3) $ texto "Choose rule"
-  let reglas = infoEstatica !! 1
-  let dibReglas = translate 0 (alturasCasillas !! 4) $ pictures $ listaTextos reglas 'X' inicioCasillas evCReglas False
-  let lReglas = length reglas
-  let cbx2 = pictures $ dibujaCheckbox (lReglas - 1) regla 'X' inicioCasillas evCReglas
-  let checkboxReglas = translate 0 (alturasCasillas !! 5) cbx2
+  let alturasReglas = [alturasCasillas !! 3, alturasCasillas !! 4, alturasCasillas !! 5]
+  bloqueReglas <- creaBloque alturasReglas etiquetaReglas infoReg regla (fst distribucionOpciones, evCReglas)
   -- Dibujando los tamaños de dibujado disponibles
+  let alturasCel = [alturasCasillas !! 6, alturasCasillas !! 7, alturasCasillas !! 8]
   let cel = cabeza "pintaOpciones" $ cabeza "pintaOpciones" adicional
-  let tituloCelulas = translate inicioCasillas (alturasCasillas !! 6) $ texto "Choose number of cells"
-  let celulas = infoEstatica !! 2
-  let dibCelulas = translate 0 (alturasCasillas !! 7) $ pictures $ listaTextos celulas 'X' inicioCasillas evolucionCasillas False
-  let lCelulas = length celulas
   let celula
         | cel == "Very big" = 3
         | cel == "Big" = 2
         | cel == "Standard" = 1
         | otherwise = 0
-  let cbx2 = pictures $ dibujaCheckbox (lCelulas - 1) celula 'X' inicioCasillas evolucionCasillas
-  let checkboxCelulas = translate 0 (alturasCasillas !! 8) cbx2
-  -- Preparamos los botones y la lista para crear la imagen
-  let (pX, pY) = posProp
-  let prop = translate pX pY $ boton "Properties of selected rule" anchoBotonExtraLargo altoBotonExtraLargo
-  let (aX, aY) = posAnim
-  let anim = translate aX aY $ boton "Watch animation" anchoBotonMedio altoBotonMedio
-  let listaRes1 = [borde, tituloCon, dibCondiciones, checkboxCondiciones, tituloReglas, dibReglas]
-  let listaRes2 = [checkboxReglas, tituloCelulas, dibCelulas, checkboxCelulas, prop, anim]
-  let listaRes = listaRes1 ++ listaRes2
-  -- Resultado
-  let res = pictures listaRes
-  return res
+  bloqueCel <- creaBloque alturasCel etiquetaCel infoCel celula distribucionOpciones
+  -- Preparamos los botones
+  prop <- creaBotonExtraLargo posProp etiquetaProp
+  anim <- creaBotonMedio posAnim etiquetaAnim
+  -- Devolvemos la imagen
+  return $ pictures [borde, bloqueCon, bloqueReglas, bloqueCel, prop, anim]
 
 seleccionaOpciones :: Point -> Mundo -> IO Mundo
-seleccionaOpciones raton@(x, y) mundo = do
+seleccionaOpciones raton@(x,y) mundo = do
   -- Valores de separación entre las casillas de las opciones
   let iC = fst distribucionOpciones
   let eC = snd distribucionOpciones
   let evCReglas = eC - 60.0
   -- Buscando la casilla en cuestión
-  let indice = minimum [if cercaBox y altura then p else 99 | (altura, p) <- zip alturasEstaticas [0 ..]]
+  let indice = filter (\(a, _) -> cercaBox y a) $ zip alturasEstaticas [0 ..]
+  let ind
+        | null indice = 99
+        | otherwise = (snd . cabeza "opcionPulsada") indice
   let fila
-        | indice == 99 = head infoEstatica
-        | otherwise = infoEstatica !! indice
+        | null indice = cabeza "opcionPulsada" infoEstatica
+        | otherwise = infoEstatica !! ind
   let limite = length fila
   let listaDistribuciones
-        | indice == 1 = zip [iC, iC + evCReglas ..] [0 .. (limite - 1)]
+        | ind == 1 = zip [iC, iC + evCReglas ..] [0 .. (limite - 1)]
         | otherwise = zip [iC, iC + eC ..] [0 .. (limite - 1)]
-  let indice2 = minimum [if cercaBox x longitud then p else 99 | (longitud, p) <- listaDistribuciones]
+  let indice2 = filter (\(l, _) -> cercaBox x l) listaDistribuciones
   let columna
-        | indice == 99 || indice2 == 99 = head fila
-        | otherwise = fila !! indice2
+        | null indice2 = cabeza "opcionPulsada" fila
+        | otherwise = fila !! (snd . cabeza "opcionPulsada") indice2
   let propiedades = pulsaCerca raton posProp
-  let animacion = pulsaCerca raton posAnim
-  -- Cambiamos la información de la animación
-  nuevoMundo@(prop, (reg, cond, aut), an, ad) <- cambiaOpcion raton mundo indice columna
+  let anim = pulsaCerca raton posAnim
+  -- Cambiamos la información del juego a ejecutar y preparamos el tablero inicial
+  nuevoMundo@(prop, (reg, cond, aut), an, ad) <- cambiaOpcion raton mundo ind columna
   let mundoAejecutar
         | propiedades = ("propiedades", (reg, cond, aut), an, ad)
-        | animacion = ("animacion", (reg, cond, aut), True, ad)
+        | anim = ("animacion", (reg, cond, aut), True, ad)
         | otherwise = nuevoMundo
   return mundoAejecutar
 
 {- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Auxiliares
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -}
+
+etiquetaCond :: String
+etiquetaCond = "Initial conditions"
+
+etiquetaReglas :: String
+etiquetaReglas = "Choose rule"
+
+etiquetaCel :: String
+etiquetaCel = "Choose number of cells"
+
+etiquetaProp :: String
+etiquetaProp = "Properties of selected rule"
 
 posProp :: Point
 posProp = (-240.0, -180.0)

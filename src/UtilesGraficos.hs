@@ -2,8 +2,11 @@ module UtilesGraficos(
     -- Colores
     gris,
     marron,
+    -- Etiquetas
+    etiquetaAnim,
     -- Constantes
     tamCheckbox,
+    tamañoRectangulo,
     anchoBoton,
     altoBoton,
     anchoBotonMedio,
@@ -16,6 +19,10 @@ module UtilesGraficos(
     texto,
     menuInicial,
     iniciaOpciones,
+    creaBloque,
+    creaBoton,
+    creaBotonMedio,
+    creaBotonExtraLargo,
     listaTextos,
     dibujaCheckbox,
     boton,
@@ -34,11 +41,20 @@ gris = makeColor 0.4 0.4 0.4 0.8
 marron :: Color
 marron = makeColorI 140 76 0 255
 
+etiquetaAnim :: String
+etiquetaAnim = "Watch animation"
+
 tamCheckbox :: Float
 tamCheckbox = 10.0
 
 posListaDePropiedades :: Float
 posListaDePropiedades = -430.0
+
+horizontal :: Char
+horizontal = 'X'
+
+tamañoRectangulo :: Point
+tamañoRectangulo = (1000, 500)
 
 anchoBoton :: Float
 anchoBoton = 150.0
@@ -71,13 +87,32 @@ correccionPosicion2 :: Float -> Float
 correccionPosicion2 ancho = ancho / 4.0
 
 texto :: String -> Picture
-texto = scale 0.2 0.2 . color black . text
+texto = uncurry scale tamañoTexto . color black . text
 
 menuInicial :: Mundo
 menuInicial = ("menu", (0,"nada", vacia), False, [["nada"]])
 
 iniciaOpciones :: Mundo
 iniciaOpciones = ("opciones", (0, "nada", vacia), False, [["Standard"]])
+
+creaBloque :: [Float] -> String -> [String] -> Int -> Point -> IO Picture
+creaBloque alturas titulo info caja (inicioCasillas, evolucionCasillas) = do
+  let [a1, a2, a3] = alturas
+  let pintaTitulo = translate inicioCasillas a1 $ texto titulo
+  let pintaInfo = translate 0 a2 $ pictures $ listaTextos info horizontal inicioCasillas evolucionCasillas False
+  let lInfo = length info
+  let cbx = pictures $ dibujaCheckbox (lInfo - 1) caja horizontal inicioCasillas evolucionCasillas
+  let checkbox = translate 0 a3 cbx
+  return $ pictures [pintaTitulo, pintaInfo, checkbox]
+
+creaBoton :: Point -> String -> IO Picture
+creaBoton (x, y) etiqueta = return $ translate x y $ boton etiqueta anchoBoton altoBoton
+
+creaBotonMedio :: Point -> String -> IO Picture
+creaBotonMedio (x, y) etiqueta = return $ translate x y $ boton etiqueta anchoBotonMedio altoBotonMedio
+
+creaBotonExtraLargo :: Point -> String -> IO Picture
+creaBotonExtraLargo (x, y) etiqueta = return $ translate x y $ boton etiqueta anchoBotonExtraLargo altoBotonExtraLargo
 
 listaTextos :: [String] -> Char -> Float -> Float -> Bool -> [Picture]
 listaTextos [] _ _ _ _ = []
@@ -155,8 +190,14 @@ cercaY a b
 {- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Funciones auxiliares
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -}
+tamañoTexto :: Point
+tamañoTexto = (0.2,0.2)
+
 cuadroRelleno :: Picture
 cuadroRelleno = color black $ rectangleSolid tamCheckbox tamCheckbox
 
 cuadroVacio :: Picture
 cuadroVacio = rectangleWire tamCheckbox tamCheckbox
+
+textoBoton :: String -> Picture
+textoBoton = uncurry scale tamañoTexto . color white . text

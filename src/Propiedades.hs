@@ -22,11 +22,9 @@ pintaPropiedades mundo@(pantalla, (regla, condicion, automata), animacion, adici
   let textosPropiedades = propiedadesRegla regla
   let propiedades = translate 200.0 0.0 $ pictures $ listaTextos textosPropiedades 'Y' comienzoLista evolucionLista True
   -- Preparamos los botones y la lista para crear la imagen
-  let (vX, vY) = posVolver
-  let prop = translate vX vY $ boton "Back to options" anchoBotonMedio altoBotonMedio
-  let (aX, aY) = posAnim
-  let anim = translate aX aY $ boton "Watch animation" anchoBotonMedio altoBotonMedio
-  let listaRes = [titulo, propiedades, prop, anim]
+  volver <- creaBotonMedio posVolver "Back to options"
+  anim <- creaBotonMedio posAnim "Watch animation"
+  let listaRes = [titulo, propiedades, volver, anim]
   -- Resultado
   let res = pictures listaRes
   return res

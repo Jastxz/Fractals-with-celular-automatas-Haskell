@@ -28,12 +28,9 @@ pintaAnimacion mundo@(pantalla, (regla, condiciones, automata), animacion, adici
   let posicionesMatriz = [(f, c) | f <- [1 .. numCels], c <- [1 .. numCels]]
   let celulas = map (\pos -> pintaCelula numCels tamCelula (matrizPosiciones ! pos) (automata ! pos)) posicionesMatriz
   let dibujoAutomata = pictures celulas
-  let (vX, vY) = posVolver
-  let volver = translate vX vY $ boton "Back to options" anchoBotonMedio altoBotonMedio
-  let (pX, pY) = posPausar
-  let pausar = translate pX pY $ boton "Pause" anchoBoton altoBoton
-  let (rX, rY) = posReanudar
-  let reanudar = translate rX rY $ boton "Resume" anchoBoton altoBoton
+  volver <- creaBotonMedio posVolver "Back to options"
+  pausar <- creaBoton posPausar "Pause"
+  reanudar <- creaBoton posReanudar "Resume"
   let res = pictures [dibujoAutomata, volver, pausar, reanudar]
   return res
 
