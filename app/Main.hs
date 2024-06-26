@@ -1,6 +1,6 @@
 module Main where
 
-import Interaction
+import Interaccion
 
 main :: IO ()
-main = mainInteraction
+main = comenzarPrograma
