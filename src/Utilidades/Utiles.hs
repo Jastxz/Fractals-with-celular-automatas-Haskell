@@ -3,6 +3,7 @@ module Utilidades.Utiles
     rangos,
     vacia,
     cabeza,
+    posicion,
     binario,
     esInt,
     esReal,
@@ -57,6 +58,9 @@ cabeza :: String -> [a] -> a
 cabeza funcion lista
   | null lista = error $ "La lista pasada en la funcion " ++ funcion ++ " esta vacia."
   | otherwise = head lista
+
+posicion :: String -> Int -> [a] -> a
+posicion funcion pos lista = indiceLista lista pos funcion
 
 binario :: Int -> Int
 binario n

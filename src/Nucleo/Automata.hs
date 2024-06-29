@@ -59,10 +59,10 @@ aplicaRegla fila regla automata
   | fila > P.length automata - 1 = automata
   | otherwise = intercambia automata filaActualizada fila
     where
-      vectorCels = automata !! fila
+      vectorCels = posicion "aplicaRegla" fila automata
       vectorAnterior
         | fila == 0 = vectorCels
-        | otherwise = automata !! (fila - 1)
+        | otherwise = posicion "aplicaRegla" (fila - 1) automata
       filaActualizada = aplicaRegla' regla vectorAnterior vectorCels (V.length vectorAnterior - 1, 0, 1)
 
 aplicaRegla' :: Int -> Vector Int -> Vector Int -> (Int, Int, Int) -> Vector Int

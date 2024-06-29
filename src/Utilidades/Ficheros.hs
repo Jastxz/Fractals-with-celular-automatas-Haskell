@@ -18,7 +18,7 @@ import System.FilePath ((</>))
 import Tipos.TipoAutomata
 import Tipos.TipoMundo
 import Utilidades.BBDD
-import Utilidades.Utiles (intercambia)
+import Utilidades.Utiles (intercambia, posicion)
 
 preparaDirectorios :: IO ()
 preparaDirectorios = do
@@ -71,9 +71,10 @@ guardarAutomata mundo = do
 cargarFilaArchivo :: Mundo -> IO Automata
 cargarFilaArchivo mundo = do
   let cargado = automataGuardado mundo
+  let long = Prelude.length cargado
   let fil = fila mundo
   let aut = automata mundo
-  let filaCargada = cargado !! fil
+  let filaCargada | fil < long = posicion "cargarFilaArchivo" fil cargado | otherwise = Prelude.last cargado
   return $ intercambia aut filaCargada fil
 
 {- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

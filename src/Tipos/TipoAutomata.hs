@@ -34,7 +34,7 @@ cuentaAparicionesPorFila aut fila numero
   | V.elem numero vector = cuentaAparicionesEnVector vector numero
   | otherwise = 0
   where
-    vector = aut !! fila
+    vector = posicion "cuentaAparicionesPorFila" fila aut
 
 cuentaAparicionesEnVector :: V.Vector Int -> Int -> Int
 cuentaAparicionesEnVector vector numero
@@ -81,7 +81,7 @@ intercambiaElementoEnVector vector indice elemento = V.append principio $ V.cons
     final = V.drop nUltimos vector
 
 convertirListaDeListasEnJson :: [[Int]] -> ByteString
-convertirListaDeListasEnJson lista = A.encode [(indice, lista !! indice) | indice <- [0 .. P.length lista - 1]]
+convertirListaDeListasEnJson lista = A.encode [(indice, posicion "convertirListaDeListasEnJson" indice lista) | indice <- [0 .. P.length lista - 1]]
 
 convertirJsonEnListaDeListas :: ByteString -> [[Int]]
 convertirJsonEnListaDeListas bytes = P.map P.snd lista

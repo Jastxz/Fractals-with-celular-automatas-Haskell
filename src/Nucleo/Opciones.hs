@@ -82,11 +82,11 @@ pintaOpciones mundo
 
       -- Definición de los radio button de las condiciones iniciales
       let esquinasCheckRandomCondiciones = mallaInterior !! 11
-      let datosElementoCheckRandom = metaDatosElementoVacioFondoBlanco {datosNombre = etiquetaRandom, datosEsquinas = esquinasCheckRandomCondiciones}
+      let datosElementoCheckRandom = metaDatosElementoVacioFondoBlanco {datosNombre = etiquetaRandom, datosEsquinas = esquinasCheckRandomCondiciones, datosPulsado = condiciones mundo == etiquetaRandom}
       let datosCheckRandom = metadatosFormaRadioButton {F.metadatosElemento = datosElementoCheckRandom, F.datosMarcar = condiciones mundo == etiquetaRandom}
 
       let esquinasCheckOneCondiciones = (primEsquina (mallaInterior !! 13), secEsquina (mallaInterior !! 15), tercEsquina (mallaInterior !! 13), cuartaEsquina (mallaInterior !! 15))
-      let datosElementoCheckOne = metaDatosElementoVacioFondoBlanco {datosNombre = etiquetaOneCell, datosEsquinas = esquinasCheckOneCondiciones}
+      let datosElementoCheckOne = metaDatosElementoVacioFondoBlanco {datosNombre = etiquetaOneCell, datosEsquinas = esquinasCheckOneCondiciones, datosPulsado = condiciones mundo == etiquetaOneCell}
       let datosCheckOne = metadatosFormaRadioButton {F.metadatosElemento = datosElementoCheckOne, F.datosMarcar = condiciones mundo == etiquetaOneCell}
 
       -- Definición de las entradas del resto de opciones
@@ -156,13 +156,13 @@ pintaOpciones mundo
 
 seleccionaOpciones :: Mundo -> String -> IO Mundo
 seleccionaOpciones mundo nombreElPulsado
-  | nombreElPulsado == etiquetaRandom = return mundo {condiciones = etiquetaRandom, automata = automataVacio}
-  | nombreElPulsado == etiquetaOneCell = return mundo {condiciones = etiquetaOneCell, automata = automataVacio}
+  | nombreElPulsado == etiquetaRandom = return mundo {condiciones = etiquetaRandom, automata = automataVacio, automataGuardado = automataVacio}
+  | nombreElPulsado == etiquetaOneCell = return mundo {condiciones = etiquetaOneCell, automata = automataVacio, automataGuardado = automataVacio}
   | nombreElPulsado == botonPropiedades = return mundo {siguientePantalla = propiedades}
   | nombreElPulsado == botonPlay = do
       existeGuardado <- existe mundo
       let conds = condiciones mundo
-      if existeGuardado && conds /= etiquetaRandom
+      if existeGuardado && conds == etiquetaOneCell
         then do
           mundoAutomataCargado <- cargarAutomata mundo
           return mundoAutomataCargado {siguientePantalla = C.animacion}
@@ -174,8 +174,8 @@ actualizaTextosOpciones = actualizaTextosEspecialOpciones
 
 actualizaTextosEspecialOpciones :: Mundo -> Elemento -> IO Mundo
 actualizaTextosEspecialOpciones mundo elementoActual
-  | nombreElemento == entradaRegla = return mundo {regla = reglaActualizada, automata = automataVacio}
-  | nombreElemento == entradaNumCels = return mundo {celulas = celulasActualizadas, automata = automataVacio}
+  | nombreElemento == entradaRegla = return mundo {regla = reglaActualizada, automata = automataVacio, automataGuardado = automataVacio}
+  | nombreElemento == entradaNumCels = return mundo {celulas = celulasActualizadas, automata = automataVacio, automataGuardado = automataVacio}
   | otherwise = return mundo
   where
     nombreElemento = nombre elementoActual

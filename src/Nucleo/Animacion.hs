@@ -137,11 +137,11 @@ animaAutomata mundo
       return $ mundoAutomataActualizado {fila = 1, M.animacion = True}
   | finalizado = do
       existeGuardado <- existe mundo
-      if existeGuardado && conds /= etiquetaRandom
-        then return $ mundo {M.animacion = False}
-        else do
+      if not existeGuardado && conds == etiquetaOneCell
+        then do
           guardarAutomata mundo
           return $ mundo {M.animacion = False}
+        else return $ mundo {M.animacion = False}
   | otherwise = do
       mundoAutomataActualizado <- automataActualizado mundo
       return $ mundoAutomataActualizado {fila = fil + 1}
